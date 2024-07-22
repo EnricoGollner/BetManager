@@ -1,11 +1,11 @@
 import 'package:bet_manager_app/core/theme/ui_responsivity.dart';
 import 'package:flutter/material.dart';
 
-class BoxIcon extends StatelessWidget {
+class CustomIcon extends StatelessWidget {
   final IconData iconData;
   final Color color;
 
-  const BoxIcon({
+  const CustomIcon({
     super.key,
     required this.iconData,
     required this.color

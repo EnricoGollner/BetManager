@@ -1,7 +1,7 @@
 import 'package:bet_manager_app/core/theme/colors.dart';
 import 'package:bet_manager_app/core/theme/ui_responsivity.dart';
 import 'package:bet_manager_app/core/utils/validator.dart';
-import 'package:bet_manager_app/screens/widgets/box_icon.dart';
+import 'package:bet_manager_app/screens/widgets/custom_icon.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -33,7 +33,6 @@ class CustomTextField extends StatefulWidget {
   final bool autofocus;
   final Function()? onPressed;
   final bool isFilled;
-  final bool isWhite;
   final void Function()? onEditingComplete;
   final void Function(PointerDownEvent)? onTapOutside;
   final bool handleDecimal;
@@ -69,7 +68,6 @@ class CustomTextField extends StatefulWidget {
     this.onPressed,
     this.initialValue,
     this.isFilled = true,
-    this.isWhite = false,
     this.onEditingComplete,
     this.onTapOutside,
     this.handleDecimal = false,
@@ -181,7 +179,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
                 ),
               ),
               prefixIcon: widget.prefixIcon != null
-                  ? BoxIcon(
+                  ? CustomIcon(
                       iconData: widget.prefixIcon!,
                       color: secondaryColor,
                     )
@@ -191,12 +189,12 @@ class _CustomTextFieldState extends State<CustomTextField> {
               suffixIconConstraints: BoxConstraints.tight(const Size(60, 25)),
               filled: widget.isFilled,
               hintStyle: const TextStyle(
-                color: bodyTextColor,
+                color: hintColor,
                 fontWeight: FontWeight.w400
               ),
               hintText: widget.hintText,
               contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 15.s),
-              fillColor: widget.enabled ? widget.isWhite ? bodyTextColor3 : bodyTextColor4 : bodyTextColor5,
+              fillColor: bodyTextColor3,
             ),
           ),
         ),
@@ -208,7 +206,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
     return widget.isPassword
       ? GestureDetector(
         onTap: () => setState(() => _obscureText = !_obscureText),
-        child: BoxIcon(
+        child: CustomIcon(
               iconData: _obscureText ? Icons.visibility : Icons.visibility_off,
               color: secondaryColor,
             ),
@@ -216,14 +214,14 @@ class _CustomTextFieldState extends State<CustomTextField> {
       : widget.enableButtonCleanValue
         ? GestureDetector(
             onTap: clearTextField,
-            child: BoxIcon(
+            child: CustomIcon(
               iconData: Icons.clear,
               color: bodyTextColor5.withOpacity(0.4),
             ),
           )
         : widget.suffixicon != null ? GestureDetector(
             onTap: widget.onPressedSuffixIcon,
-            child: BoxIcon(
+            child: CustomIcon(
               iconData: widget.suffixicon!,
               color: secondaryColor,
             ),
