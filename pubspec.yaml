@@ -1,0 +1,47 @@
+name: bet_manager_app
+description: "A new Flutter project."
+publish_to: 'none'
+version: 0.1.0
+
+environment:
+  sdk: '>=3.4.3 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  fl_chart: ^0.68.0
+  sizer: ^2.0.15
+  provider: ^6.1.2
+  intl: ^0.19.0
+  equatable: ^2.0.5
+  flutter_localizations:
+    sdk: flutter
+  shimmer: ^3.0.0
+  path: ^1.8.3
+  sqflite: ^2.3.3+1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^3.0.0
+  
+  # flutter_native_splash: ^2.4.1
+
+# flutter_native_splash:
+#   color: "#2E276C"
+#   image: assets/splash_screen.png
+#   android: true
+#   ios: true
+#   branding: assets/splash_branding.png
+
+#   android_12:
+#     color: "#2E276C"
+#     image: assets/splash_screen_v31.png
+#     branding: assets/splash_branding_v31.png
+#     android: true
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/
+    - assets/splash/
