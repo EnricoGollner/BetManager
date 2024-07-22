@@ -116,7 +116,7 @@ class _WeekTransactionChartState extends State<WeekTransactionChart> {
       x: dayPosition,
       barRods: [
         BarChartRodData(
-          toY: earned,
+          toY: earned > 1000 ? 1000 : earned,
           color: incomeColor,
           width: 7,
         ),
@@ -140,7 +140,7 @@ class _WeekTransactionChartState extends State<WeekTransactionChart> {
         text = '500';
         break;
       case 1000:
-        text = '1k';
+        text = '1k+';
         break;
       default:
         return Container();
