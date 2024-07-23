@@ -75,7 +75,6 @@ class _MainScreenState extends State<MainScreen> {
                         }
                       ),
                     ),
-                    const SizedBox(height: 12),
                   ],
                 ),
               ),
@@ -85,9 +84,7 @@ class _MainScreenState extends State<MainScreen> {
                 slivers: [
                   SliverToBoxAdapter(
                   child: Consumer<TransactionController>(
-                    builder: (_, __, ___) {
-                      return _buildTransactionsList();
-                    }
+                    builder: (_, __, ___) => _buildTransactionsList()
                   ),
                 ),
                 ],
@@ -107,20 +104,21 @@ class _MainScreenState extends State<MainScreen> {
   ExpansionPanelList _buildTransactionsList() {
     return ExpansionPanelList(
       expandedHeaderPadding: const EdgeInsets.all(0),
-      dividerColor: bodyTextColor3,
-      expandIconColor: bodyTextColor2,
+      expandIconColor: bodyTextColor4,
       expansionCallback: (panelIndex, isExpanded) {
         setState(()=> _weekDaysExpansel[panelIndex].isExpanded = isExpanded);
       },
-      children: _weekDaysExpansel.map<ExpansionPanel>((weekDayExpansel) {
+    children: _weekDaysExpansel.map<ExpansionPanel>((weekDayExpansel) {
         return ExpansionPanel(
           backgroundColor: backgroundColor,
           isExpanded: weekDayExpansel.isExpanded,
           headerBuilder: (context, isExpanded) {
             return ListTile(
+              splashColor: Colors.transparent,
+              onTap: () => setState(()=> weekDayExpansel.isExpanded = !isExpanded),
               title: Text(
                 Formatter.formatDatetime(weekDayExpansel.date),
-                style: const TextStyle(color: bodyTextColor2),
+                style: const TextStyle(color: bodyTextColor4),
               ),
             );
           },

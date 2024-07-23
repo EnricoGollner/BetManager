@@ -1,5 +1,6 @@
 import 'package:bet_manager_app/controllers/transaction_controller.dart';
 import 'package:bet_manager_app/controllers/filter_controller.dart';
+import 'package:bet_manager_app/core/theme/style.dart';
 import 'package:bet_manager_app/screens/main_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -25,20 +26,22 @@ class MainApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return Sizer(
       builder: (context, orientation, deviceType) {
-        return const MaterialApp(
+        return MaterialApp(
           debugShowCheckedModeBanner: false,
-          localizationsDelegates: [
+          localizationsDelegates: const [
             GlobalMaterialLocalizations.delegate,
             GlobalCupertinoLocalizations.delegate,
           ],
-          supportedLocales: <Locale>[
+          supportedLocales: const <Locale>[
             Locale('pt', 'BR'),
             Locale('en', 'US'),
           ],
+          theme: Style.material3Theme,
           title: 'Bet Manager',
-          home: MainScreen(),
+          home: const MainScreen(),
         );
       }
     );
   }
 }
+
