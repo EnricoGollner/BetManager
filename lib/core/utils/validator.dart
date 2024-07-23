@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 class Validator {
-
+  ///Método para validar se foi digitado algo no campo de texto
   static String? isRequired(String? text, {required String fieldLabel}) {
     if (text == null || text.trim().isEmpty) {
       return 'O campo \'$fieldLabel\' é obrigatório';
@@ -34,4 +34,10 @@ class Validator {
         }
       }
     }
+
+    
+  ///Método para comparar duas datas, verificando se é o mesmo dia
+  static bool verifyDate(DateTime date, {required DateTime compareTo}) {
+    return date.day == compareTo.day && date.month == compareTo.month && date.year == compareTo.year;
+  }
 }

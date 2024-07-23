@@ -1,4 +1,5 @@
 import 'package:bet_manager_app/core/theme/colors.dart';
+import 'package:bet_manager_app/core/utils/validator.dart';
 import 'package:bet_manager_app/models/transaction.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
@@ -73,10 +74,10 @@ class _WeekTransactionChartState extends State<WeekTransactionChart> {
     );
   }
 
-  double _getPercentage(double total) {
-    double weekTotal = widget.recentTransactions.fold(0.0, (previousValue, transaction) => previousValue + transaction.amount);
-    return weekTotal == 0 ? 0 : (total / weekTotal) * 100;
-  }
+  // double _getPercentage(double total) {
+  //   double weekTotal = widget.recentTransactions.fold(0.0, (previousValue, transaction) => previousValue + transaction.amount);
+  //   return weekTotal == 0 ? 0 : (total / weekTotal) * 100;
+  // }
 
   void _touchCallback(FlTouchEvent event, response) {
       if (response == null || response.spot == null) {
@@ -186,7 +187,7 @@ class _WeekTransactionChartState extends State<WeekTransactionChart> {
       double spent = 0.0;
 
       for (Transaction transaction in widget.recentTransactions) {
-        if (transaction.date.day == weekDay.day && transaction.date.month == weekDay.month && transaction.date.year == weekDay.year) {
+        if (Validator.verifyDate(transaction.date, compareTo: weekDay)) {
           transaction.type == TransactionType.income
             ? earned += transaction.amount
             : spent += transaction.amount;

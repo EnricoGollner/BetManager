@@ -4,9 +4,9 @@ class DBUtil {
 
   static const String createTableQuery = '''
     CREATE TABLE $transactionTable (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      title VARCHAR(100),
-      value REAL,
+      code INTEGER PRIMARY KEY AUTOINCREMENT,
+      amount REAL,
+      type VARCHAR(30),
       date DATETIME
     )
   ''';

@@ -1,11 +1,11 @@
 import 'package:audioplayers/audioplayers.dart';
-import 'package:bet_manager_app/controllers/filter_controller.dart';
+// import 'package:bet_manager_app/controllers/filter_controller.dart';
 import 'package:bet_manager_app/controllers/transaction_controller.dart';
 import 'package:bet_manager_app/core/theme/colors.dart';
 import 'package:bet_manager_app/core/theme/ui_responsivity.dart';
 import 'package:bet_manager_app/core/utils/formatter.dart';
+import 'package:bet_manager_app/core/utils/validator.dart';
 import 'package:bet_manager_app/models/transaction.dart';
-import 'package:bet_manager_app/screens/widgets/custom_date_text_field.dart';
 import 'package:bet_manager_app/screens/widgets/custom_transaction_card.dart';
 import 'package:bet_manager_app/screens/widgets/register_form.dart';
 import 'package:bet_manager_app/screens/widgets/week_transaction_chart.dart';
@@ -26,18 +26,17 @@ class _MainScreenState extends State<MainScreen> {
 
   int touchedGroupIndex = -1;
 
-  final TextEditingController _initialDateController = TextEditingController();
-  final TextEditingController _finalDateController = TextEditingController();
+  // final TextEditingController _initialDateController = TextEditingController();
+  // final TextEditingController _finalDateController = TextEditingController();
 
   late TransactionController _transactionController;
-  late FilterController _filterController;
+  // late FilterController _filterController;
 
   @override
   void initState() {
-    _filterController = context.read<FilterController>();
+    // _filterController = context.read<FilterController>();
 
-    WidgetsBinding.instance.addPostFrameCallback((_) => _transactionController.getRecentTransactions());
-
+    WidgetsBinding.instance.addPostFrameCallback((_) async => await _transactionController.getTransactions());
     super.initState();
   }
 
@@ -75,17 +74,16 @@ class _MainScreenState extends State<MainScreen> {
               ),
             ),
             Expanded(
-              child: Consumer<TransactionController>(
-                builder: (context, value, child) {
-                return ListView.separated(
-                  separatorBuilder: (context, index) => const SizedBox(height: 5),
-                  itemCount: _transactionController.transactions.length,
-                  itemBuilder: (context, index) {
-                    final Transaction transaction = _transactionController.transactions[index];
-                    return CustomTransactionCard(transaction);
-                  },
-                );
-              }
+              child: CustomScrollView(
+                slivers: [
+                  SliverToBoxAdapter(
+                  child: Consumer<TransactionController>(
+                    builder: (_, __, ___) {
+                      return _buildTransactionsList();
+                    }
+                  ),
+                ),
+                ],
               ),
             ),
           ],
@@ -99,33 +97,79 @@ class _MainScreenState extends State<MainScreen> {
     );
   }
 
-  Widget _buildDateRange() {
-    return Padding(
-      padding: EdgeInsets.only(top: 10.s),
-      child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              Expanded(
-                child: CustomDateTextField(
-                  labelText: 'From:',
-                  selectDate: () async => await _pickDateTime(isInitial: true),
-                  controller: _finalDateController,
-                  prefixIcon: Icons.today,
-                ),
+  ExpansionPanelList _buildTransactionsList() {
+    return ExpansionPanelList(
+      expandedHeaderPadding: const EdgeInsets.all(0),
+      dividerColor: bodyTextColor3,
+      expandIconColor: bodyTextColor2,
+      expansionCallback: (panelIndex, isExpanded) {
+        setState((){
+          
+        });
+      },
+      children: List.generate(7, (index) => DateTime.now().add(Duration(days: index))).map<ExpansionPanel>((date) {
+        return ExpansionPanel(
+          backgroundColor: backgroundColor,
+          isExpanded: true,
+          headerBuilder: (context, isExpanded) {
+            return ListTile(
+              title: Text(
+                Formatter.formatDatetime(date),
+                style: const TextStyle(color: bodyTextColor2),
               ),
-              const SizedBox(width: 10),
-              Expanded(
-                child: CustomDateTextField(
-                  labelText: 'To:',
-                  selectDate: () async => await _pickDateTime(),
-                  controller: _initialDateController,
-                  prefixIcon: Icons.event,
-                ),
-              ),
-            ],
-          ),
+            );
+          },
+          body: _buildListTransactionPerDay(date),
+        );
+      }).toList(),
     );
   }
+
+  Widget _buildListTransactionPerDay(DateTime date) {
+    final List<Transaction> dayTransactions = _transactionController.transactions.where(
+      (transaction) {
+        return Validator.verifyDate(transaction.date, compareTo: date);
+      },
+    ).toList();
+
+    return ListView.separated(
+      shrinkWrap: true,
+      separatorBuilder: (_, __) => const SizedBox(height: 5),
+      itemCount: dayTransactions.length,
+      itemBuilder: (_, index) {
+        final Transaction transaction = _transactionController.transactions[index];
+        return CustomTransactionCard(transaction);
+      },
+    ); 
+  }
+
+  // Widget _buildDateRange() {
+  //   return Padding(
+  //     padding: EdgeInsets.only(top: 10.s),
+  //     child: Row(
+  //           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+  //           children: [
+  //             Expanded(
+  //               child: CustomDateTextField(
+  //                 labelText: 'From:',
+  //                 selectDate: () async => await _pickDateTime(isInitial: true),
+  //                 controller: _finalDateController,
+  //                 prefixIcon: Icons.today,
+  //               ),
+  //             ),
+  //             const SizedBox(width: 10),
+  //             Expanded(
+  //               child: CustomDateTextField(
+  //                 labelText: 'To:',
+  //                 selectDate: () async => await _pickDateTime(),
+  //                 controller: _initialDateController,
+  //                 prefixIcon: Icons.event,
+  //               ),
+  //             ),
+  //           ],
+  //         ),
+  //   );
+  // }
 
   Row _buildHeader() {
     return Row(
@@ -189,28 +233,28 @@ class _MainScreenState extends State<MainScreen> {
     );
   }
 
-    Future<void> _pickDateTime({bool isInitial = true}) async {
-    final DateTime? pickedDateTime = await showDatePicker(
-      context: context,
-      locale: const Locale('pt', 'BR'),
-      initialDate: isInitial ? _filterController.initialDate : _filterController.finalDate,
-      firstDate: DateTime(2024),
-      lastDate: DateTime.now(),
-      selectableDayPredicate: isInitial
-          ? (DateTime day) => day.isBefore(_filterController.finalDate)
-          : (DateTime day) => day.isAfter(_filterController.initialDate),
-    );
+  //   Future<void> _pickDateTime({bool isInitial = true}) async {
+  //   final DateTime? pickedDateTime = await showDatePicker(
+  //     context: context,
+  //     locale: const Locale('pt', 'BR'),
+  //     initialDate: isInitial ? _filterController.initialDate : _filterController.finalDate,
+  //     firstDate: DateTime(2024),
+  //     lastDate: DateTime.now(),
+  //     selectableDayPredicate: isInitial
+  //         ? (DateTime day) => day.isBefore(_filterController.finalDate)
+  //         : (DateTime day) => day.isAfter(_filterController.initialDate),
+  //   );
 
-    if (pickedDateTime != null) {
-      if (isInitial) {
-        _filterController.setInitialDate(pickedDateTime);
-        _initialDateController.text = Formatter.formatDatetime(pickedDateTime);
-      } else {
-        _filterController.setFinalDate(pickedDateTime);
-        _finalDateController.text = Formatter.formatDatetime(pickedDateTime);
-      }
-    }
-  }
+  //   if (pickedDateTime != null) {
+  //     if (isInitial) {
+  //       _filterController.setInitialDate(pickedDateTime);
+  //       _initialDateController.text = Formatter.formatDatetime(pickedDateTime);
+  //     } else {
+  //       _filterController.setFinalDate(pickedDateTime);
+  //       _finalDateController.text = Formatter.formatDatetime(pickedDateTime);
+  //     }
+  //   }
+  // }
 
   void _showDialogNewTransaction() {
     showGeneralDialog(
