@@ -136,6 +136,7 @@ class _MainScreenState extends State<MainScreen> {
     ).toList();
 
     return ListView.separated(
+      physics: const NeverScrollableScrollPhysics(),
       shrinkWrap: true,
       separatorBuilder: (_, __) => const SizedBox(height: 5),
       itemCount: dayTransactions.length,

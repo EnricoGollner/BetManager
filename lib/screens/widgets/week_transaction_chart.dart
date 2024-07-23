@@ -122,7 +122,7 @@ class _WeekTransactionChartState extends State<WeekTransactionChart> {
           width: 7,
         ),
         BarChartRodData(
-          toY: spent,
+          toY: spent > 1000 ? 1000 : spent,
           color: primaryColor,
           width: 7,
         ),
