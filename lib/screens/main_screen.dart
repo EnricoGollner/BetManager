@@ -6,6 +6,7 @@ import 'package:bet_manager_app/core/theme/ui_responsivity.dart';
 import 'package:bet_manager_app/core/utils/formatter.dart';
 import 'package:bet_manager_app/core/utils/validator.dart';
 import 'package:bet_manager_app/models/transaction.dart';
+import 'package:bet_manager_app/models/week_day_expansel.dart';
 import 'package:bet_manager_app/screens/widgets/custom_transaction_card.dart';
 import 'package:bet_manager_app/screens/widgets/register_form.dart';
 import 'package:bet_manager_app/screens/widgets/week_transaction_chart.dart';
@@ -32,9 +33,15 @@ class _MainScreenState extends State<MainScreen> {
   late TransactionController _transactionController;
   // late FilterController _filterController;
 
+  late List<WeekDayExpansel> _weekDaysExpansel;
+
   @override
   void initState() {
     // _filterController = context.read<FilterController>();
+
+    _weekDaysExpansel = List.generate(7, (index) {
+      return WeekDayExpansel(date: DateTime.now().add(Duration(days: index)), isExpanded: index == 0);
+    });
 
     WidgetsBinding.instance.addPostFrameCallback((_) async => await _transactionController.getTransactions());
     super.initState();
@@ -103,23 +110,21 @@ class _MainScreenState extends State<MainScreen> {
       dividerColor: bodyTextColor3,
       expandIconColor: bodyTextColor2,
       expansionCallback: (panelIndex, isExpanded) {
-        setState((){
-          
-        });
+        setState(()=> _weekDaysExpansel[panelIndex].isExpanded = isExpanded);
       },
-      children: List.generate(7, (index) => DateTime.now().add(Duration(days: index))).map<ExpansionPanel>((date) {
+      children: _weekDaysExpansel.map<ExpansionPanel>((weekDayExpansel) {
         return ExpansionPanel(
           backgroundColor: backgroundColor,
-          isExpanded: true,
+          isExpanded: weekDayExpansel.isExpanded,
           headerBuilder: (context, isExpanded) {
             return ListTile(
               title: Text(
-                Formatter.formatDatetime(date),
+                Formatter.formatDatetime(weekDayExpansel.date),
                 style: const TextStyle(color: bodyTextColor2),
               ),
             );
           },
-          body: _buildListTransactionPerDay(date),
+          body: _buildListTransactionPerDay(weekDayExpansel.date),
         );
       }).toList(),
     );
@@ -127,9 +132,7 @@ class _MainScreenState extends State<MainScreen> {
 
   Widget _buildListTransactionPerDay(DateTime date) {
     final List<Transaction> dayTransactions = _transactionController.transactions.where(
-      (transaction) {
-        return Validator.verifyDate(transaction.date, compareTo: date);
-      },
+      (transaction) => Validator.verifyDate(transaction.date, compareTo: date),
     ).toList();
 
     return ListView.separated(
