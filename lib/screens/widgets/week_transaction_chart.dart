@@ -181,7 +181,7 @@ class _WeekTransactionChartState extends State<WeekTransactionChart> {
 
   List<BarChartGroupData> _buildChartGroups() {
     return List.generate(7, (index) {
-      final DateTime weekDay = DateTime.now().subtract(Duration(days: index)); // Today's date subtracting in each iteration
+      final DateTime weekDay = DateTime.now().add(Duration(days: index)); // Today's date subtracting in each iteration
       double earned = 0.0;
       double spent = 0.0;
 

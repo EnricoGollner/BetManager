@@ -37,18 +37,25 @@ class CustomTransactionCard extends StatelessWidget {
                     Text(Formatter.doubleToCurrency(transaction.amount)),
                   ],
                 ),
-                Container(
-                  padding: const EdgeInsets.all(5),
-                  decoration: BoxDecoration(
-                    color: secondaryColor,
-                    borderRadius: BorderRadius.circular(5)
-                  ),
-                  child: Text(Formatter.formatDatetime(transaction.date), style: const TextStyle(color: bodyTextColor3),),
-                ),
+                _buildRegisteredDateContainer(transaction.date),
               ],
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  Container _buildRegisteredDateContainer(DateTime date) {
+    return Container(
+      padding: const EdgeInsets.all(5),
+      decoration: BoxDecoration(
+        color: secondaryColor,
+        borderRadius: BorderRadius.circular(5)
+      ),
+      child: Text(
+        Formatter.formatDatetime(date),
+        style: const TextStyle(color: bodyTextColor3),
       ),
     );
   }

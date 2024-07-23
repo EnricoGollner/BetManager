@@ -2,8 +2,15 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 class Validator {
+
+  static String? isRequired(String? text, {required String fieldLabel}) {
+    if (text == null || text.trim().isEmpty) {
+      return 'O campo \'$fieldLabel\' é obrigatório';
+    }
+    return null;
+  }
   
-  /// Método para validar se o número está terminando com as casas decimais de forma correta
+  ///Método para validar se o número está terminando com as casas decimais de forma correta
   static void handleDecimal(TextEditingController controller, {int decimalRange = 2}){
       String signal = Platform.localeName == 'pt_BR' ? ',' : '.';
       String value = controller.text;

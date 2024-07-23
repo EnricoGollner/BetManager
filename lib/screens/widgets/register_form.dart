@@ -1,5 +1,6 @@
 import 'package:bet_manager_app/core/theme/colors.dart';
 import 'package:bet_manager_app/core/theme/ui_responsivity.dart';
+import 'package:bet_manager_app/core/utils/validator.dart';
 import 'package:bet_manager_app/screens/widgets/custom_icon.dart';
 import 'package:bet_manager_app/screens/widgets/custom_primary_button.dart';
 import 'package:bet_manager_app/screens/widgets/custom_text_field.dart';
@@ -79,6 +80,7 @@ class _RegisterFormState extends State<RegisterForm> {
                                       child: CustomTextField(
                                           autofocus: true,
                                           controller: ctrlAmount,
+                                          validatorFunction: (text) => Validator.isRequired(text, fieldLabel: 'Valor'),
                                           keyboardType: const TextInputType.numberWithOptions(decimal: true),
                                           prefixIcon: Icons.money,
                                           label: 'Valor:',
@@ -107,7 +109,7 @@ class _RegisterFormState extends State<RegisterForm> {
                                             ChoiceChip(
                                               selected: !isIncome,
                                               selectedColor: primaryColor,
-                                              label: const Text('Depósito'),
+                                              label: Text('Depósito', style: TextStyle(color: !isIncome ? bodyTextColor3 : bodyTextColor5),),
                                               onSelected: (newValue) {
                                                 setState(() {
                                                   if (!isIncome) return;

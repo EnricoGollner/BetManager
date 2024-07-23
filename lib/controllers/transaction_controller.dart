@@ -21,7 +21,8 @@ class TransactionController extends ChangeNotifier {
       code: 1,
       amount: value,
       type: type,
-      date: DateTime.now(),
+      // date: DateTime.now(), //TODO - DESCOMENTAR
+      date: DateTime(2024, 7, 28),  //TESTE DE REGISTRO DIA DA SEMANA
     );
     transactions.add(newTransaction);
     

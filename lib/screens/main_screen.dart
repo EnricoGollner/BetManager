@@ -134,7 +134,7 @@ class _MainScreenState extends State<MainScreen> {
         _makeTransactionsIcon(),
         const SizedBox(width: 38),
         const Text(
-          'Transactions',
+          'Week Transactions',
           style: TextStyle(color: Colors.white, fontSize: 22),
         ),
         const SizedBox(width: 4),
