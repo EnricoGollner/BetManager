@@ -9,7 +9,12 @@ class Style {
         brightness: Brightness.dark,
         surface: backgroundColor,
         onSurface: bodyTextColorBlack,
-      )
+      ),
+      expansionTileTheme: const ExpansionTileThemeData(
+        iconColor: bodyTextColor4,
+        textColor: bodyTextColor4,
+        collapsedBackgroundColor: bodyTextColor4,
+      ),
     );
   }
 }

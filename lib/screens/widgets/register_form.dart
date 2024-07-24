@@ -54,7 +54,11 @@ class _RegisterFormState extends State<RegisterForm> {
                                 children: [
                                   const Text(
                                     'Nova Transação',
-                                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w500,
+                                  color: bodyTextColorBlack,
+                                ),
                                   ),
                                   IconButton(
                                     splashRadius: 20.s,

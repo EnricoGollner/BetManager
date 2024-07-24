@@ -6,7 +6,6 @@ import 'package:bet_manager_app/core/theme/ui_responsivity.dart';
 import 'package:bet_manager_app/core/utils/formatter.dart';
 import 'package:bet_manager_app/core/utils/validator.dart';
 import 'package:bet_manager_app/models/transaction.dart';
-import 'package:bet_manager_app/models/week_day_expansion.dart';
 import 'package:bet_manager_app/screens/widgets/custom_transaction_card.dart';
 import 'package:bet_manager_app/screens/widgets/register_form.dart';
 import 'package:bet_manager_app/screens/widgets/week_transaction_chart.dart';
@@ -33,13 +32,11 @@ class _MainScreenState extends State<MainScreen> {
   late TransactionController _transactionController;
   // late FilterController _filterController;
 
-  late List<WeekDayExpansion> _weekDaysExpansel;
 
   @override
   void initState() {
     // _filterController = context.read<FilterController>();
 
-    _weekDaysExpansel = _generateWeekDates();
 
     WidgetsBinding.instance.addPostFrameCallback((_) async => await _transactionController.getTransactions());
     super.initState();
@@ -70,8 +67,7 @@ class _MainScreenState extends State<MainScreen> {
                       child: Consumer<TransactionController>(
                         builder: (_, __, ___) {
                         return WeekTransactionChart(
-                          recentTransactions: _transactionController.weekTransactions,
-                          weekDays: _weekDaysExpansel,
+                          weekDays: _transactionController.weekTransactions,
                         );
                         }
                       ),
@@ -107,26 +103,34 @@ class _MainScreenState extends State<MainScreen> {
       expandedHeaderPadding: const EdgeInsets.all(0),
       expandIconColor: bodyTextColor4,
       expansionCallback: (panelIndex, isExpanded) {
-        setState(()=> _weekDaysExpansel[panelIndex].isExpanded = isExpanded);
+        setState(()=>  _transactionController.weekTransactions[panelIndex].isExpanded = isExpanded);
       },
-    children: _weekDaysExpansel.map<ExpansionPanel>((weekDayExpansel) {
+      children:  _transactionController.weekTransactions.map<ExpansionPanel>((weekDayExpansel) {
         return ExpansionPanel(
-          backgroundColor: backgroundColor,
-          isExpanded: weekDayExpansel.isExpanded,
-          headerBuilder: (context, isExpanded) {
-            return ListTile(
-              splashColor: Colors.transparent,
-              onTap: () => setState(()=> weekDayExpansel.isExpanded = !isExpanded),
-              title: Text(
-                Formatter.formatDatetime(weekDayExpansel.date),
-                style: const TextStyle(color: bodyTextColor4),
-              ),
-            );
-          },
-          body: _buildListTransactionPerDay(weekDayExpansel.date),
-        );
-      }).toList(),
-    );
+            isExpanded: weekDayExpansel.isExpanded,
+            headerBuilder: (context, isExpanded) {
+              return ListTile(
+                splashColor: Colors.transparent,
+                onTap: () => setState(()=> weekDayExpansel.isExpanded = !isExpanded),
+                title: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      Formatter.formatDatetime(weekDayExpansel.date),
+                      style: const TextStyle(color: bodyTextColor4),
+                    ),
+                  Text(
+                    weekDayExpansel.transactions.length.toString(),
+                    style: const TextStyle(fontSize: 14, color: bodyTextColor4),
+                  ),
+                  ],
+                ),
+              );
+            },
+            body: _buildListTransactionPerDay(weekDayExpansel.date),
+          );
+        }).toList(),
+      );
   }
 
   Widget _buildListTransactionPerDay(DateTime date) {
@@ -303,20 +307,5 @@ class _MainScreenState extends State<MainScreen> {
   Future<void> _playIncomeSound() async {
     final AudioPlayer audioPlayer = AudioPlayer();
     await audioPlayer.play(AssetSource('sounds/money.mp3'));
-  }
-  
-  List<WeekDayExpansion> _generateWeekDates() {
-    final DateTime currentDate = DateTime.now();
-    DateTime firstWeekDay = currentDate.subtract(Duration(days: currentDate.weekday));  //Sunday
-    
-    return List.generate(
-      7,
-      (index) {
-        return WeekDayExpansion(
-          date: firstWeekDay.add(Duration(days: index)),
-          isExpanded: false,
-        );
-      },
-    );
   }
 }

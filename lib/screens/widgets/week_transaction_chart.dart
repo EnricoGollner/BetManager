@@ -6,12 +6,10 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 
 class WeekTransactionChart extends StatefulWidget {
-  final List<Transaction> recentTransactions;
   final List<WeekDayExpansion> weekDays;
 
   const WeekTransactionChart({
     super.key,
-    required this.recentTransactions,
     required this.weekDays,
   });
 
@@ -187,19 +185,19 @@ class _WeekTransactionChartState extends State<WeekTransactionChart> {
   }
 
   List<BarChartGroupData> _buildChartGroups() {
-    return widget.weekDays.map((date) {
+    return widget.weekDays.map((day) {
       double earned = 0.0;
       double spent = 0.0;
 
-      for (Transaction transaction in widget.recentTransactions) {
-        if (Validator.verifyDate(transaction.date, compareTo: date.date)) {
+      for (Transaction transaction in day.transactions) {
+        if (Validator.verifyDate(transaction.date, compareTo: day.date)) {
           transaction.type == TransactionType.income
             ? earned += transaction.amount
             : spent += transaction.amount;
         }
       }
 
-      return _buildDayValues(dayPosition: date.date.weekday - 1, earned: earned, spent: spent);
+      return _buildDayValues(dayPosition: day.date.weekday - 1, earned: earned, spent: spent);
     }).toList();
   }
 }

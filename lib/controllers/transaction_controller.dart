@@ -1,12 +1,14 @@
+import 'package:bet_manager_app/core/utils/validator.dart';
 import 'package:bet_manager_app/models/repositories/transaction_repository.dart';
 import 'package:bet_manager_app/models/transaction.dart';
+import 'package:bet_manager_app/models/week_day_expansion.dart';
 import 'package:flutter/material.dart';
 
 class TransactionController extends ChangeNotifier {
   late TransactionRepository _repository;
 
   List<Transaction> transactions = List.empty(growable: true);
-  List<Transaction> weekTransactions = List.empty(growable: true);
+  List<WeekDayExpansion> weekTransactions = List.empty(growable: true);
 
   TransactionController() {
     _repository = TransactionRepository();
@@ -19,9 +21,20 @@ class TransactionController extends ChangeNotifier {
 
   ///Método para ordenar transações da semana
   void orderRecentTransactions() {
-    weekTransactions = transactions.where(
-      (transaction) => transaction.date.isAfter(DateTime.now().subtract(const Duration(days: 7))),
-    ).toList();
+    final DateTime currentDate = DateTime.now();
+    DateTime firstWeekDay = currentDate.subtract(Duration(days: currentDate.weekday));  //Sunday
+    
+    weekTransactions = List.generate(
+      7,
+      (index) {
+        final DateTime currentDate = firstWeekDay.add(Duration(days: index));
+        return WeekDayExpansion(
+          date: currentDate,
+          transactions: transactions.where((transaction) => Validator.verifyDate(transaction.date, compareTo: currentDate)).toList(),
+          isExpanded: false,
+        );
+      },
+    );
     notifyListeners();
   }
 
