@@ -1,8 +1,8 @@
-class WeekDayExpansel {
+class WeekDayExpansion {
   final DateTime date;
   bool isExpanded;
 
-  WeekDayExpansel({
+  WeekDayExpansion({
     required this.date,
     required this.isExpanded,
   });

@@ -41,7 +41,7 @@ class CustomPrimaryButton extends StatelessWidget {
             onPressed: onPressed,
             child: Text(
               text,
-              style: const TextStyle(color: bodyTextColor3),
+              style: const TextStyle(color: surfaceColor),
             ),
           ),
         );

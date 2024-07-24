@@ -6,7 +6,7 @@ import 'package:bet_manager_app/core/theme/ui_responsivity.dart';
 import 'package:bet_manager_app/core/utils/formatter.dart';
 import 'package:bet_manager_app/core/utils/validator.dart';
 import 'package:bet_manager_app/models/transaction.dart';
-import 'package:bet_manager_app/models/week_day_expansel.dart';
+import 'package:bet_manager_app/models/week_day_expansion.dart';
 import 'package:bet_manager_app/screens/widgets/custom_transaction_card.dart';
 import 'package:bet_manager_app/screens/widgets/register_form.dart';
 import 'package:bet_manager_app/screens/widgets/week_transaction_chart.dart';
@@ -33,15 +33,13 @@ class _MainScreenState extends State<MainScreen> {
   late TransactionController _transactionController;
   // late FilterController _filterController;
 
-  late List<WeekDayExpansel> _weekDaysExpansel;
+  late List<WeekDayExpansion> _weekDaysExpansel;
 
   @override
   void initState() {
     // _filterController = context.read<FilterController>();
 
-    _weekDaysExpansel = List.generate(7, (index) {
-      return WeekDayExpansel(date: DateTime.now().add(Duration(days: index)), isExpanded: index == 0);
-    });
+    _weekDaysExpansel = _generateWeekDates();
 
     WidgetsBinding.instance.addPostFrameCallback((_) async => await _transactionController.getTransactions());
     super.initState();
@@ -71,7 +69,10 @@ class _MainScreenState extends State<MainScreen> {
                     Expanded(
                       child: Consumer<TransactionController>(
                         builder: (_, __, ___) {
-                          return WeekTransactionChart(recentTransactions: _transactionController.weekTransactions);
+                        return WeekTransactionChart(
+                          recentTransactions: _transactionController.weekTransactions,
+                          weekDays: _weekDaysExpansel,
+                        );
                         }
                       ),
                     ),
@@ -96,7 +97,7 @@ class _MainScreenState extends State<MainScreen> {
       floatingActionButton: FloatingActionButton(
         backgroundColor: primaryColor,
         onPressed: _showDialogNewTransaction,
-        child: const Icon(Icons.add, color: bodyTextColor3),
+        child: const Icon(Icons.add, color: surfaceColor),
       ),
     );
   }
@@ -293,7 +294,7 @@ class _MainScreenState extends State<MainScreen> {
     if (isIncome) await _playIncomeSound();
 
     _transactionController.addTransaction(
-      value: Formatter.currencyToDouble(amountText),
+      amount: Formatter.currencyToDouble(amountText),
       type: isIncome ? TransactionType.income : TransactionType.deposit,
     );
     if (mounted) Navigator.pop(context);
@@ -302,5 +303,20 @@ class _MainScreenState extends State<MainScreen> {
   Future<void> _playIncomeSound() async {
     final AudioPlayer audioPlayer = AudioPlayer();
     await audioPlayer.play(AssetSource('sounds/money.mp3'));
+  }
+  
+  List<WeekDayExpansion> _generateWeekDates() {
+    final DateTime currentDate = DateTime.now();
+    DateTime firstWeekDay = currentDate.subtract(Duration(days: currentDate.weekday));  //Sunday
+    
+    return List.generate(
+      7,
+      (index) {
+        return WeekDayExpansion(
+          date: firstWeekDay.add(Duration(days: index)),
+          isExpanded: false,
+        );
+      },
+    );
   }
 }

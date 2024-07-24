@@ -147,13 +147,13 @@ class _CustomTextFieldState extends State<CustomTextField> {
             decoration: InputDecoration(
               counterText: '',
               focusedErrorBorder: const OutlineInputBorder(
-                borderSide: BorderSide(color: colorError, width: 2),
+                borderSide: BorderSide(color: errorColor, width: 2),
                 borderRadius: BorderRadius.all(
                   Radius.circular(15),
                 ),
               ),
               errorBorder: const OutlineInputBorder(
-                borderSide: BorderSide(color: colorError, width: 1),
+                borderSide: BorderSide(color: errorColor, width: 1),
                 borderRadius: BorderRadius.all(
                   Radius.circular(15),
                 ),
@@ -161,19 +161,19 @@ class _CustomTextFieldState extends State<CustomTextField> {
               // errorStyle: errorStyle,
               errorMaxLines: 2,
               enabledBorder: const OutlineInputBorder(
-                borderSide: BorderSide(color: bodyTextColor5, width: 2),
+                borderSide: BorderSide(color: bodyTextColorBlack, width: 2),
                 borderRadius: BorderRadius.all(
                   Radius.circular(15),
                 ),
               ),
               disabledBorder: const OutlineInputBorder(
-                borderSide: BorderSide(color: bodyTextColor5, width: 2),
+                borderSide: BorderSide(color: bodyTextColorBlack, width: 2),
                 borderRadius: BorderRadius.all(
                   Radius.circular(15),
                 ),
               ),
               focusedBorder: const OutlineInputBorder(
-                borderSide: BorderSide(color: bodyTextColor5, width: 2.5),
+                borderSide: BorderSide(color: bodyTextColorBlack, width: 2.5),
                 borderRadius: BorderRadius.all(
                   Radius.circular(15),
                 ),
@@ -194,7 +194,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
               ),
               hintText: widget.hintText,
               contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 15.s),
-              fillColor: bodyTextColor3,
+              fillColor: surfaceColor,
             ),
           ),
         ),
@@ -216,7 +216,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
             onTap: clearTextField,
             child: CustomIcon(
               iconData: Icons.clear,
-              color: bodyTextColor5.withOpacity(0.4),
+              color: bodyTextColorBlack.withOpacity(0.4),
             ),
           )
         : widget.suffixicon != null ? GestureDetector(

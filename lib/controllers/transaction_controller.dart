@@ -25,9 +25,9 @@ class TransactionController extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> addTransaction({required double value, required TransactionType type}) async {
+  Future<void> addTransaction({required double amount, required TransactionType type}) async {
     final Transaction newTransaction = Transaction(
-      amount: value,
+      amount: amount,
       type: type,
       date: DateTime.now(),
     );

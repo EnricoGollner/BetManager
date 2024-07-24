@@ -14,6 +14,7 @@ class CustomTransactionCard extends StatelessWidget {
     bool isIncome = transaction.type == TransactionType.income; 
 
     return Card(
+      surfaceTintColor: Colors.transparent,
       color: surfaceColor,
       child: Padding(
         padding: const EdgeInsets.all(10),

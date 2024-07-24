@@ -1,5 +1,6 @@
 import 'package:bet_manager_app/core/theme/colors.dart';
 import 'package:bet_manager_app/core/theme/ui_responsivity.dart';
+import 'package:bet_manager_app/core/utils/decimal_text_input_formatter.dart';
 import 'package:bet_manager_app/core/utils/validator.dart';
 import 'package:bet_manager_app/screens/widgets/custom_icon.dart';
 import 'package:bet_manager_app/screens/widgets/custom_primary_button.dart';
@@ -52,8 +53,8 @@ class _RegisterFormState extends State<RegisterForm> {
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
                                   const Text(
-                                    'Novo Registro',
-                                    style: TextStyle(fontSize: 20),
+                                    'Nova Transação',
+                                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
                                   ),
                                   IconButton(
                                     splashRadius: 20.s,
@@ -86,6 +87,10 @@ class _RegisterFormState extends State<RegisterForm> {
                                           label: 'Valor:',
                                           hintText: 'Insira o valor do registro...',
                                           enableButtonCleanValue: true,
+                                          inputFormatters: [
+                                            DecimalTextInputFormatter.signal,
+                                            DecimalTextInputFormatter(),
+                                          ],
                                         ),
                                     ),
                                     SizedBox(height: 20.s),
@@ -97,7 +102,7 @@ class _RegisterFormState extends State<RegisterForm> {
                                             ChoiceChip(
                                               selected: isIncome,
                                               selectedColor: incomeBackgroundColor,
-                                              label: Text('Ganhos', style: TextStyle(color: isIncome ? bodyTextColor3 : bodyTextColor5),),
+                                              label: Text('Ganhos', style: TextStyle(color: isIncome ? surfaceColor : bodyTextColorBlack),),
                                               onSelected: (newValue) {
                                                 setState(() {
                                                   if (isIncome) return;
@@ -107,9 +112,17 @@ class _RegisterFormState extends State<RegisterForm> {
                                             ),
                                             SizedBox(width: 15.s),
                                             ChoiceChip(
+                                              // color: WidgetStateProperty.resolveWith(
+                                              //   (states) {
+                                              //     if (!states.contains(WidgetState.selected)) {
+                                              //       return bodyTextColor;
+                                              //     }
+                                              //     return null;
+                                              //   },
+                                              // ),
                                               selected: !isIncome,
                                               selectedColor: primaryColor,
-                                              label: Text('Depósito', style: TextStyle(color: !isIncome ? bodyTextColor3 : bodyTextColor5),),
+                                              label: Text('Depósito', style: TextStyle(color: !isIncome ? surfaceColor : bodyTextColorBlack),),
                                               onSelected: (newValue) {
                                                 setState(() {
                                                   if (!isIncome) return;

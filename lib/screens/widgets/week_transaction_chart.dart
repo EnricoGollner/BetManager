@@ -1,13 +1,19 @@
 import 'package:bet_manager_app/core/theme/colors.dart';
 import 'package:bet_manager_app/core/utils/validator.dart';
 import 'package:bet_manager_app/models/transaction.dart';
+import 'package:bet_manager_app/models/week_day_expansion.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 
 class WeekTransactionChart extends StatefulWidget {
   final List<Transaction> recentTransactions;
+  final List<WeekDayExpansion> weekDays;
 
-  const WeekTransactionChart({super.key, required this.recentTransactions});
+  const WeekTransactionChart({
+    super.key,
+    required this.recentTransactions,
+    required this.weekDays,
+  });
 
   @override
   State<WeekTransactionChart> createState() => _WeekTransactionChartState();
@@ -181,20 +187,19 @@ class _WeekTransactionChartState extends State<WeekTransactionChart> {
   }
 
   List<BarChartGroupData> _buildChartGroups() {
-    return List.generate(7, (index) {
-      final DateTime weekDay = DateTime.now().add(Duration(days: index)); // Today's date subtracting in each iteration
+    return widget.weekDays.map((date) {
       double earned = 0.0;
       double spent = 0.0;
 
       for (Transaction transaction in widget.recentTransactions) {
-        if (Validator.verifyDate(transaction.date, compareTo: weekDay)) {
+        if (Validator.verifyDate(transaction.date, compareTo: date.date)) {
           transaction.type == TransactionType.income
             ? earned += transaction.amount
             : spent += transaction.amount;
         }
       }
 
-      return _buildDayValues(dayPosition: index, earned: earned, spent: spent);
-    });
+      return _buildDayValues(dayPosition: date.date.weekday - 1, earned: earned, spent: spent);
+    }).toList();
   }
 }

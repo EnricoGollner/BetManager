@@ -5,11 +5,10 @@ class Style {
   static ThemeData get material3Theme {
     return ThemeData(
       useMaterial3: true,
-      colorScheme: const ColorScheme.dark(
+      colorScheme: const ColorScheme.light(
         brightness: Brightness.dark,
         surface: backgroundColor,
-        onSurface: bodyTextColor5,
-        surfaceContainer: bodyTextColor4,
+        onSurface: bodyTextColorBlack,
       )
     );
   }
